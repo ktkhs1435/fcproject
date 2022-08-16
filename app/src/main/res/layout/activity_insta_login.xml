@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context=".InstaLoginActivity">
+
+    <ImageView
+        android:layout_width="196dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="111dp"
+        android:layout_marginBottom="144dp"
+        android:src="@drawable/logo_outstagram" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/id_input"
+            android:layout_width="356dp"
+            android:layout_height="62dp"
+            android:hint="아이디"
+            android:textSize="18dp"
+            android:paddingLeft="27dp"
+            android:textColorHint="#070707"
+            android:background="@drawable/insta_input_bg"
+            android:layout_marginBottom="20dp" />
+
+        <EditText
+            android:id="@+id/pw_input"
+            android:layout_width="356dp"
+            android:layout_height="62dp"
+            android:hint="비밀번호"
+            android:textSize="18dp"
+            android:paddingLeft="27dp"
+            android:textColorHint="#070707"
+            android:background="@drawable/insta_input_bg"
+            android:layout_marginBottom="20dp" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <TextView
+        android:id="@+id/insta_join"
+        android:layout_marginTop="43dp"
+        android:textSize="18dp"
+        android:textColor="#1868e8"
+        android:textStyle="bold"
+        android:layout_marginBottom="90dp"
+        android:text="가입하기"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/login_btn"
+        android:layout_width="162dp"
+        android:layout_height="58dp"
+        android:background="@drawable/intsta_login"
+        android:text="로그인하기"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+</androidx.appcompat.widget.LinearLayoutCompat>
