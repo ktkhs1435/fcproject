@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
@@ -21,13 +22,20 @@ import com.bumptech.glide.Glide
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 
 class InstaPostFragment : Fragment() {
     var imageUri : Uri? = null
-    var contentInput: String =''
+    var contentInput: String =""
+    lateinit var selectedContent: EditText
+    lateinit var selectedImageView : ImageView
+    lateinit var uplaod : TextView
+    lateinit var ImagePickerLauncher : ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,22 +45,14 @@ class InstaPostFragment : Fragment() {
         return inflater.inflate(R.layout.insta_post_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    fun makePost(){
 
-        val selectedImageView = view.findViewById<ImageView>(R.id.selected_img)
-        val glide = Glide.with(activity as InstaMainActivity)
-        val ImagePickerLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                imageUri = it.data!!.data
-                glide.load(imageUri).into(selectedImageView)
-            }
         ImagePickerLauncher.launch(
             Intent(Intent.ACTION_PICK).apply {
                 this.type = MediaStore.Images.Media.CONTENT_TYPE
             }
         )
-        view.findViewById<EditText>(R.id.selected_content).doAfterTextChanged {
+        selectedContent.doAfterTextChanged {
             contentInput = it.toString()
         }
 
@@ -62,7 +62,7 @@ class InstaPostFragment : Fragment() {
             .build()
 
         val retrofitService = retrofit.create(RetrofitService::class.java)
-        view.findViewById<TextView>(R.id.upload).setOnClickListener {
+        uplaod.setOnClickListener {
             val file = getRealFile(imageUri!!)
             val requestFile = RequestBody.create(
                 MediaType.parse(
@@ -77,12 +77,34 @@ class InstaPostFragment : Fragment() {
                 Context.MODE_PRIVATE
             )
             val token = sp.getString("token","")
-            header.put("Authorization",token!!)
+            header.put("Authorization","token " + token!!)
 
-            retrofitService.uploadPost(header,body, content).enqueue(object:Callback<Any>{
+            retrofitService.uploadPost(header,body, content).enqueue( object : Callback<Any>{
+                override fun onResponse(call: Call<Any>, response: Response<Any>) {
 
+                }
+
+                override fun onFailure(call: Call<Any>, t: Throwable) {
+
+                }
             })
         }
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        selectedContent = view.findViewById(R.id.selected_content)
+        selectedImageView = view.findViewById(R.id.selected_img)
+        uplaod = view.findViewById(R.id.upload)
+
+        val glide = Glide.with(activity as InstaMainActivity)
+        ImagePickerLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                imageUri = it.data!!.data
+                glide.load(imageUri).into(selectedImageView)
+            }
+
+
     }
     private fun getRealFile(uri: Uri): File? {
         var uri: Uri? = uri

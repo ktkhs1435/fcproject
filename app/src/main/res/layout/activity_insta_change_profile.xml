@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22dp"
-        android:text="프로필 편집"
-        android:textColor="#1d1d1d"
-        android:layout_marginLeft="23dp"
-        android:layout_marginBottom="26dp" />
+    android:gravity="center"
+    android:padding="16dp"
+    tools:context=".InstaChangeProfileActivity">
 
     <ImageView
         android:id="@+id/profile_img"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
         android:src="@drawable/btn_outsta_my"
         android:layout_gravity="center_horizontal" />
 
@@ -24,9 +20,9 @@
         android:id="@+id/change_img"
         android:layout_width="144dp"
         android:layout_height="42dp"
-        android:background="@drawable/intsta_login"
         android:layout_marginTop="19dp"
-        android:text="변경하기"
+        android:background="@drawable/intsta_login"
+        android:text="완료"
         android:textColor="@color/white"
         android:layout_gravity="center_horizontal"
         android:textSize="18dp"

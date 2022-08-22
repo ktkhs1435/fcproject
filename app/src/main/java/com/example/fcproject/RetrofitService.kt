@@ -24,7 +24,16 @@ class OwnerProfile(
     val username: String, val image: String?
 )
 
+class UserInfo(
+    val id : Int, val username : String, val profile: OwnerProfile
+)
+
 interface RetrofitService {
+
+    @GET("user/userInfo/")
+    fun getUserInfo(
+        @HeaderMap headers: Map<String, String>,
+    ):Call<UserInfo>
 
     @Multipart
     @POST("instagram/post/")

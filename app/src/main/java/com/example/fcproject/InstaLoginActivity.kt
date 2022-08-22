@@ -51,7 +51,7 @@ class InstaLoginActivity : AppCompatActivity() {
                             getSharedPreferences("user_info", Context.MODE_PRIVATE)
                         val editor : SharedPreferences.Editor = sharedPreferences.edit()
                         editor.putString("token",user.token)
-                        editor.putString("id",user.id.toString())
+                        editor.putString("user_id",user.id.toString())
                         editor.commit()
                         startActivity(Intent(this@InstaLoginActivity,InstaMainActivity::class.java))
                     }
