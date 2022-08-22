@@ -8,12 +8,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import okhttp3.MediaType
 import okhttp3.MultipartBody
+import okhttp3.Request
 import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 
 class InstaChangeProfileActivity : AppCompatActivity() {
@@ -29,19 +37,19 @@ class InstaChangeProfileActivity : AppCompatActivity() {
 
         glide = Glide.with(this)
 
-        val ImagePickerLauncher =
+        val imagePickerLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 imageUri = it.data!!.data
                 glide!!.load(imageUri).into(imageView)
             }
 
-        ImagePickerLauncher.launch(
+        imagePickerLauncher.launch(
             Intent(Intent.ACTION_PICK).apply {
                 this.type = MediaStore.Images.Media.CONTENT_TYPE
             }
         )
 
-        findViewById<ImageView>(R.id.change_img).setOnClickListener{
+        findViewById<TextView>(R.id.change_img).setOnClickListener{
             val file = getRealFile(imageUri!!)
             val requestFile = RequestBody.create(
                 MediaType.parse(
@@ -56,6 +64,28 @@ class InstaChangeProfileActivity : AppCompatActivity() {
             )
             val token = sp.getString("token","")
             header.put("Authorization","token " + token!!)
+            val userId : Int = sp.getString("user_id","")!!.toInt()
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl("http://mellowcode.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val retrofitService = retrofit.create(RetrofitService::class.java)
+            val user = RequestBody.create(MultipartBody.FORM, userId.toString())
+            retrofitService.changeProfile(userId, header, body, user).enqueue(object : Callback<Any>{
+                override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                    if(response.isSuccessful){
+                        Toast.makeText(this@InstaChangeProfileActivity,"변경완료", Toast.LENGTH_SHORT).show()
+                        onBackPressed()
+                    }
+                }
+
+                override fun onFailure(call: Call<Any>, t: Throwable) {
+                    Toast.makeText(this@InstaChangeProfileActivity,"변경실패", Toast.LENGTH_SHORT).show()
+
+                }
+            })
         }
     }
 

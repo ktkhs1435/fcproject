@@ -28,7 +28,42 @@ class UserInfo(
     val id : Int, val username : String, val profile: OwnerProfile
 )
 
+class ToDo(
+    val id : Int,
+    val content : String,
+    val is_complete: Boolean,
+    val created: String
+
+)
+
 interface RetrofitService {
+
+    @PUT("to-do/complete/{todoId}")
+    fun changeToDoComplete(
+        @HeaderMap headers: Map<String,String>,
+        @Path("todoId") todoId: Int
+    ): Call<Any>
+
+    @GET("to-do/")
+    fun getToDoList(
+        @HeaderMap headers: Map<String,String>,
+    ): Call<ArrayList<ToDo>>
+
+    @POST("to-do/")
+    @FormUrlEncoded
+    fun makeToDo(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: HashMap<String, Any>
+    ):Call<Any>
+
+    @Multipart
+    @PUT("user/profile/{user_id}/")
+    fun changeProfile(
+        @Path("user_id") userId : Int,
+        @HeaderMap headers: Map<String, String>,
+        @Part image : MultipartBody.Part,
+        @Part("user") user: RequestBody
+    ):Call<Any>
 
     @GET("user/userInfo/")
     fun getUserInfo(
